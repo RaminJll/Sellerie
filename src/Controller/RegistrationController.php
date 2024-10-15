@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\User;
@@ -21,17 +20,20 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Set the name
+            $user->setNom($form->get('nom')->getData());
+
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
+            // Encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
+            // Persist the user to the database
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
-
+            // Redirect to login page after successful registration
             return $this->redirectToRoute('app_login');
         }
 
@@ -40,3 +42,4 @@ class RegistrationController extends AbstractController
         ]);
     }
 }
+

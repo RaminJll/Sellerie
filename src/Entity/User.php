@@ -7,10 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Enum\UserRole;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,11 +28,15 @@ class User implements UserInterface
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(enumType: UserRole::class)]
-    private ?string $role = null;
+    #[ORM\Column(type: 'string', enumType: UserRole::class)]
+    private UserRole $role;
 
     #[ORM\Column(nullable: true)]
     private ?int $nombre_prets = null;
+
+    public function __construct() {
+        $this->role = UserRole::USER;
+    }
 
     public function getId(): ?int
     {
@@ -98,17 +104,16 @@ class User implements UserInterface
 
     public function getRoles(): array
     {
-        return [$this->role->value]; // Assure-toi de retourner un tableau
+        return [$this->role->value];
     }
 
-    // Implémentation de getUserIdentifier()
     public function getUserIdentifier(): string
     {
-        return $this->email; // Utilise l'email comme identifiant
+        return $this->email; 
     }
 
     public function eraseCredentials(): void
     {
-        // Si tu stockes des données sensibles, efface-les ici
+       
     }
 }
