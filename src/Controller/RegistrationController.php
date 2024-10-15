@@ -20,20 +20,16 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Set the name
             $user->setNom($form->get('nom')->getData());
 
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // Encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            // Persist the user to the database
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Redirect to login page after successful registration
             return $this->redirectToRoute('app_login');
         }
 

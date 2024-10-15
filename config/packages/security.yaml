@@ -12,23 +12,17 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
             lazy: true
             provider: app_user_provider
             form_login:
                 login_path: app_login
                 check_path: app_login
+                enable_csrf: true
                 default_target_path: app_home
-                enable_csrf: true  # Active la protection CSRF
-                csrf_token_id: authenticate  # Utilise un token CSRF spécifique
-                csrf_parameter: _csrf_token  # Nom du paramètre CSRF dans le formulaire
-                username_parameter: _username
-                password_parameter: _password
-
             logout:
                 path: app_logout
                 target: app_login
 
     access_control:
-        - { path: ^/home, roles: ROLE_USER }
+        
