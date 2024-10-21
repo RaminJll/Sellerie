@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Enum\UserRole; // Assurez-vous d'importer l'énumération des rôles si nécessaire
+use App\Enum\UserRole;
 
 class UserFixtures extends Fixture
 {
