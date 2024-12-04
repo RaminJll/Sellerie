@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\UserRole;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -34,8 +36,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $nombre_prets = null;
 
+    /**
+     * @var Collection<int, Historiques>
+     */
+    #[ORM\OneToMany(targetEntity: Historiques::class, mappedBy: 'id_user')]
+    private Collection $historiques;
+
+    /**
+     * @var Collection<int, Statistiques>
+     */
+    #[ORM\OneToMany(targetEntity: Statistiques::class, mappedBy: 'id_user')]
+    private Collection $statistiques;
+
     public function __construct() {
         $this->role = UserRole::USER;
+        $this->historiques = new ArrayCollection();
+        $this->statistiques = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,5 +131,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
        
+    }
+
+    /**
+     * @return Collection<int, Historiques>
+     */
+    public function getHistoriques(): Collection
+    {
+        return $this->historiques;
+    }
+
+    public function addHistorique(Historiques $historique): static
+    {
+        if (!$this->historiques->contains($historique)) {
+            $this->historiques->add($historique);
+            $historique->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistorique(Historiques $historique): static
+    {
+        if ($this->historiques->removeElement($historique)) {
+            // set the owning side to null (unless already changed)
+            if ($historique->getIdUser() === $this) {
+                $historique->setIdUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Statistiques>
+     */
+    public function getStatistiques(): Collection
+    {
+        return $this->statistiques;
+    }
+
+    public function addStatistique(Statistiques $statistique): static
+    {
+        if (!$this->statistiques->contains($statistique)) {
+            $this->statistiques->add($statistique);
+            $statistique->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatistique(Statistiques $statistique): static
+    {
+        if ($this->statistiques->removeElement($statistique)) {
+            // set the owning side to null (unless already changed)
+            if ($statistique->getIdUser() === $this) {
+                $statistique->setIdUser(null);
+            }
+        }
+
+        return $this;
     }
 }
