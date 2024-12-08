@@ -3,39 +3,59 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+<section class="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
+      <div class="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                  Connectez vous à votre compte
+              </h1>
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-            </div>
-        {% endif %}
+              {# Affichage des erreurs #}
+              {% if error %}
+                  <div class="bg-red-100 text-red-600 p-3 rounded-lg">
+                      L'email ou le mot de passe est incorrect
+                  </div>
+              {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+              {# Affichage si l'utilisateur est connecté #}
+              {% if app.user %}
+                  <div class="mb-3 text-gray-700 dark:text-gray-300">
+                      Vous êtes connecté <strong>{{ app.user.userIdentifier }}</strong>,
+                      <a href="{{ path('app_logout') }}" class="text-primary-600 hover:underline dark:text-primary-500">Déconnexion</a>
+                  </div>
+              {% endif %}
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
+              {# Formulaire de connexion #}
+              <form method="post" class="space-y-4 md:space-y-6">
+                  <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+                  <div>
+                      <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                      <input type="email" name="_username" id="email" value="{{ last_username }}" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                          placeholder="name@company.com" required autofocus>
+                  </div>
+                  <div>
+                      <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
+                      <input type="password" name="_password" id="password" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                          placeholder="••••••••" required>
+                  </div>
+                  <div class="flex items-center justify-between">
+                      <div class="flex items-start">
+                          <div class="flex items-center h-5">
+                            <a href="{{ path('app_register') }}" class="text-primary-600 hover:underline dark:text-white">Inscription</a>
+                          </div>
+                      </div>
+                  </div>
+                  <button type="submit" 
+                      class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                      Connexion
+                  </button>
+              </form>
+          </div>
+      </div>
+  </div>
+</section>
 {% endblock %}
