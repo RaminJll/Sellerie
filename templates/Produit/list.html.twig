@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{{ dump(produits) }}
+	{{ dump(categorie) }}
+	<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
+			<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
+				Explore the whole collection of open-source web components and elements built with the utility classes from Tailwind
+			</p>
+		</div>
+		<div
+			class="mx-auto max-w-screen-xl px-4 lg:px-12">
+			<!-- Start coding here -->
+			<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th scope="col" class="px-4 py-3">Nom</th>
+								<th scope="col" class="px-4 py-3">Category</th>
+								<th scope="col" class="px-4 py-3">Type de produit</th>
+								<th scope="col" class="px-4 py-3">Statut</th>
+								<th scope="col" class="px-4 py-3">Catégorie de rayon</th>
+								<th scope="col" class="px-4 py-3">Étagère</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for produit in produits %}
+								<tr class="border-b dark:border-gray-700">
+									<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ produit.nom }}</td>
+									<td class="px-4 py-3">{{ produit.categorie }}</td>
+									<td class="px-4 py-3">{{ produit.type_produit }}</td>
+									<td class="px-4 py-3">{{ produit.etat.value }}</td>
+									<td class="px-4 py-3">{{ produit.categorie_rayon }}</td>
+									<td class="px-4 py-3">{{ produit.etagere }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- Pagination dynamique -->
+				<div
+					class="pagination flex items-center space-x-1">
+					{# Affichage des pages #}
+					{% for page in 1..produits.pageCount %}
+						{% if page == produits.currentPageNumber %}
+							<span class="text-sm py-2 px-3 font-semibold leading-tight text-primary-600 bg-primary-50 border border-primary-300 rounded">
+								{{ page }}
+							</span>
+						{% else %}
+							<a href="{{ path('produit_list', { categorie: categorie, type: type, page: page }) }}" class="text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white rounded">
+								{{ page }}
+							</a>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

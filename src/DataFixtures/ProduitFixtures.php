@@ -38,7 +38,7 @@ class ProduitFixtures extends Fixture
                     $etagereCounter[$type] = 0;
                 }
 
-                for ($i = 1; $i <= 4; $i++) {
+                for ($i = 1; $i <= 200; $i++) {
                     $produit = new Produit();
 
                     // Nom du produit

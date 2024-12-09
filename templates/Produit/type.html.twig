@@ -1,0 +1,28 @@
+{# templates/Produit/type.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<section class="bg-white dark:bg-gray-900">
+		<div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 ">
+			<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+				<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Our Team</h2>
+				<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">Explore the whole collection of open-source web components and elements built with the utility classes from Tailwind</p>
+			</div>
+			{{ dump(types)}}
+			{{ dump(categorie)}}
+			<div class="grid gap-8 mb-6 md:grid-cols-2 text-center items-center">
+				{% for type in types %}
+					<div class="items-center p-9 bg-gray-50 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 text-center w-80 mx-auto">
+						<div class="p-10 text-center flex justify-center items-center">
+							<h2 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+								<a href="{{ path('produit_list', {'categorie': categorie, 'type': type.type_produit}) }}">{{type.type_produit}}</a>
+							</h2>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+		</div>
+	</section>
+{% endblock %}
