@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dcdda406c8528fa1ef6fee7717777e36",
+    "content-hash": "97a1914c3f20fb9261c1c78e635dc389",
     "packages": [
         {
             "name": "composer/semver",
@@ -4106,16 +4106,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v7.1.5",
+            "version": "v7.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "e30ef73b1e44eea7eb37ba69600a354e553f694b"
+                "reference": "82765842fb599c7ed839b650214680c7ee5779be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/e30ef73b1e44eea7eb37ba69600a354e553f694b",
-                "reference": "e30ef73b1e44eea7eb37ba69600a354e553f694b",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/82765842fb599c7ed839b650214680c7ee5779be",
+                "reference": "82765842fb599c7ed839b650214680c7ee5779be",
                 "shasum": ""
             },
             "require": {
@@ -4125,12 +4125,12 @@
             },
             "conflict": {
                 "doctrine/dbal": "<3.6",
-                "symfony/cache": "<6.4"
+                "symfony/cache": "<6.4.12|>=7.0,<7.1.5"
             },
             "require-dev": {
                 "doctrine/dbal": "^3.6|^4",
                 "predis/predis": "^1.1|^2.0",
-                "symfony/cache": "^6.4|^7.0",
+                "symfony/cache": "^6.4.12|^7.1.5",
                 "symfony/dependency-injection": "^6.4|^7.0",
                 "symfony/expression-language": "^6.4|^7.0",
                 "symfony/http-kernel": "^6.4|^7.0",
@@ -4163,7 +4163,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v7.1.5"
+                "source": "https://github.com/symfony/http-foundation/tree/v7.1.9"
             },
             "funding": [
                 {
@@ -4179,7 +4179,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-20T08:28:38+00:00"
+            "time": "2024-11-13T18:58:36+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -5872,16 +5872,16 @@
         },
         {
             "name": "symfony/security-bundle",
-            "version": "v7.1.4",
+            "version": "v7.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-bundle.git",
-                "reference": "5e10107856ff64d477c61fed7bcbb8a16125ea01"
+                "reference": "7df1d3d431be03fbeb1b162eebca424005b48cdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/5e10107856ff64d477c61fed7bcbb8a16125ea01",
-                "reference": "5e10107856ff64d477c61fed7bcbb8a16125ea01",
+                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/7df1d3d431be03fbeb1b162eebca424005b48cdd",
+                "reference": "7df1d3d431be03fbeb1b162eebca424005b48cdd",
                 "shasum": ""
             },
             "require": {
@@ -5958,7 +5958,7 @@
             "description": "Provides a tight integration of the Security component into the Symfony full-stack framework",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/security-bundle/tree/v7.1.4"
+                "source": "https://github.com/symfony/security-bundle/tree/v7.1.6"
             },
             "funding": [
                 {
@@ -5974,7 +5974,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-20T11:38:55+00:00"
+            "time": "2024-09-25T14:20:29+00:00"
         },
         {
             "name": "symfony/security-core",
