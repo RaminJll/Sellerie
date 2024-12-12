@@ -5,12 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class DefaultPageController extends AbstractController
+
+class ContactController extends AbstractController
 {
-    #[Route('/', name: 'app_default_page')]
+    #[Route('/contact', name: 'app_contact')]
+    #[IsGranted('ROLE_USER')]
     public function index(): Response
     {
-        return $this->redirectToRoute('app_login');
+        return $this->render('contact/contact.html.twig');
     }
 }
