@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	{{ dump(produits) }}
-	{{ dump(categorie) }}
 	<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
 		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
 			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
@@ -24,6 +22,7 @@
 								<th scope="col" class="px-4 py-3">Statut</th>
 								<th scope="col" class="px-4 py-3">Catégorie de rayon</th>
 								<th scope="col" class="px-4 py-3">Étagère</th>
+								<th scope="col" class="px-4 py-3">Réserver</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -35,7 +34,22 @@
 									<td class="px-4 py-3">{{ produit.etat.value }}</td>
 									<td class="px-4 py-3">{{ produit.categorie_rayon }}</td>
 									<td class="px-4 py-3">{{ produit.etagere }}</td>
-									<td class="px-4 py-3"><button>Réserver</button></td>
+									<td class="px-4 py-3">
+										<form method="post" action="{{ path('produit_reserver')}}">
+										<input type="hidden" name="_csrf_token" value="{{ csrf_token('produit_reserver') }}">
+											<input type="hidden" name="id" value="{{ produit.id }}">
+											{% if produit.etat.value == 'hors service' or produit.etat.value == 'en reparation' %}
+												<button class="text-white bg-red-500 hover:bg-red-700 px-3 py-2 rounded" disabled>
+													Réserver
+												</button>
+											{% else %}
+												<button type="submit" class="text-white bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded">
+													Réserver
+												</button>
+											{% endif %}
+										</form>
+									</td>
+
 								</tr>
 							{% endfor %}
 						</tbody>

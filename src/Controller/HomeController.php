@@ -18,7 +18,8 @@ class HomeController extends AbstractController
     
         return $this->render('home/home.html.twig', [
             'user' => $user->getUserIdentifier(),
-            'id' => $user->getId()
+            'id' => $user->getId(),
+            'teste' => $user
         ]);
     }
 }

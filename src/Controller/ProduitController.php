@@ -40,8 +40,6 @@ class ProduitController extends AbstractController
             'produits' => $produits,
             'categorie' => $categorie,
             'type' => $type,
-            'emailUser' => $user->getUserIdentifier(),
-            'idUser' => $user->getId()
         ]);
     }
     

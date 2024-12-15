@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Historiques;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\User;
 
 /**
  * @extends ServiceEntityRepository<Historiques>
@@ -15,6 +16,20 @@ class HistoriquesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Historiques::class);
     }
+
+    public function findHistoriqueByUser(User $user): array
+    {
+        return $this->createQueryBuilder('h')
+            ->select('h.id, h.date_empreinte, h.date_rendu, h.signalement, p.id AS id ,p.nom AS nom, p.categorie AS categorie, p.type_produit AS type_produit, p.etat AS etat')
+            ->leftJoin('h.produit', 'p')
+            ->where('h.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('h.date_empreinte', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+    
+
 
 //    /**
 //     * @return Historiques[] Returns an array of Historiques objects

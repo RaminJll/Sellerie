@@ -26,6 +26,7 @@ class ProduitFixtures extends Fixture
         $etats = [
             ProduitEtat::Neuf,
             ProduitEtat::BonEtat,
+            ProduitEtat::USE,
             ProduitEtat::Reparation,
             ProduitEtat::HorsService,
         ];

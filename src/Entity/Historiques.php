@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ProduitEtat;
 use App\Repository\HistoriquesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,11 +26,14 @@ class Historiques
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_empreinte = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable:true)]
     private ?\DateTimeInterface $date_rendu = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $signalement = null;
+
+    #[ORM\Column(enumType: ProduitEtat::class)]
+    private ?ProduitEtat $etat_init = null;
 
     public function getId(): ?int
     {
@@ -40,12 +44,22 @@ class Historiques
     {
         return $this->produit;
     }
-
+    
+    public function getProduit(): ?Produit
+    {
+        return $this->getIdProduit(); // Appel au getter existant
+    }
+    
     public function setIdProduit(?Produit $produit): static
     {
         $this->produit = $produit;
-
+    
         return $this;
+    }
+    
+    public function setProduit(?Produit $produit): static
+    {
+        return $this->setIdProduit($produit); // Appel au setter existant
     }
 
     public function getIdUser(): ?User
@@ -92,6 +106,18 @@ class Historiques
     public function setSignalement(?string $signalement): static
     {
         $this->signalement = $signalement;
+
+        return $this;
+    }
+
+    public function getEtatInit(): ?ProduitEtat
+    {
+        return $this->etat_init;
+    }
+
+    public function setEtatInit(ProduitEtat $etat_init): static
+    {
+        $this->etat_init = $etat_init;
 
         return $this;
     }
