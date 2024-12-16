@@ -34,17 +34,22 @@
                                     <td class="px-4 py-3">{{ historique.type_produit }}</td>
 									<td class="px-4 py-3">{{ historique.date_empreinte|date('d/m/Y') }}</td>
 									<td class="px-4 py-3">{{ historique.date_rendu ? historique.date_rendu|date('d/m/Y') : 'En attente de retour' }}</td>
-									<td class="px-4 py-3">{{ historique.signalement ?: 'Aucun' }}</td>
+									<td class="px-4 py-3"><textarea class="h-20" name="signalement"></textarea></td>
                                     <td class="px-4 py-3">
                                     <form method="post" action="{{ path('produit_rendre')}}">
 										<input type="hidden" name="_csrf_token" value="{{ csrf_token('produit_rendre') }}">
 											<input type="hidden" name="id" value="{{ historique.id }}">
+											<input type="hidden" name="etat_init" value="{{ historique.etat_init.value  }}">
 											{% if historique.etat.value == 'hors service' or historique.etat.value == 'en reparation' %}
 												<button class="text-white bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded">
 													Rendre
 												</button>
+											{% elseif historique.date_rendu !=  null %}
+											<button type="#" class="text-white bg-red-500 hover:bg-red-700 px-3 py-2 rounded" disabled>
+													Rendre
+												</button>
 											{% else %}
-												<button type="submit" class="text-white bg-red-500 hover:bg-red-700 px-3 py-2 rounded" disabled>
+												<button type="#" class="text-white bg-red-500 hover:bg-red-700 px-3 py-2 rounded" disabled>
 													Rendre
 												</button>
 											{% endif %}

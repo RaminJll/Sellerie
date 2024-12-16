@@ -20,7 +20,7 @@ class HistoriquesRepository extends ServiceEntityRepository
     public function findHistoriqueByUser(User $user): array
     {
         return $this->createQueryBuilder('h')
-            ->select('h.id, h.date_empreinte, h.date_rendu, h.signalement, p.id AS id ,p.nom AS nom, p.categorie AS categorie, p.type_produit AS type_produit, p.etat AS etat')
+            ->select('h.id, h.date_empreinte, h.date_rendu, h.signalement, h.etat_init, p.id AS id ,p.nom AS nom, p.categorie AS categorie, p.type_produit AS type_produit, p.etat AS etat')
             ->leftJoin('h.produit', 'p')
             ->where('h.user = :user')
             ->setParameter('user', $user)

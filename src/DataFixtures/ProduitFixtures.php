@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DataFixtures;
 
 use App\Entity\Produit;
@@ -32,12 +33,15 @@ class ProduitFixtures extends Fixture
         ];
 
         foreach ($categories as $categorie => $types) {
-            $etagereCounter = []; // Compteur pour chaque type de produit
+            $etagereCounter = []; // Compteur pour l'étagère en cours pour chaque type
+            $articlesPerEtagere = 5; // Nombre maximum d'articles par étagère
 
             foreach ($types as $type) {
                 if (!isset($etagereCounter[$type])) {
-                    $etagereCounter[$type] = 0;
+                    $etagereCounter[$type] = 1; // Initialiser le numéro d'étagère à 1 pour chaque type
                 }
+
+                $articleCount = 0; // Compteur d'articles dans l'étagère actuelle
 
                 for ($i = 1; $i <= 200; $i++) {
                     $produit = new Produit();
@@ -61,9 +65,17 @@ class ProduitFixtures extends Fixture
                     // Catégorie rayon (identique à la catégorie)
                     $produit->setCategorieRayon($categorie);
 
-                    // Étagère : Numéro incrémental par type de produit
-                    $etagereCounter[$type]++;
+                    // Gestion de l'étagère
+                    if ($articleCount >= $articlesPerEtagere) {
+                        // Passer à l'étagère suivante si le maximum est atteint
+                        $etagereCounter[$type]++;
+                        $articleCount = 0;
+                    }
+
                     $produit->setEtagere((string) $etagereCounter[$type]);
+
+                    // Incrémenter le compteur d'articles pour l'étagère actuelle
+                    $articleCount++;
 
                     // Enregistrement
                     $manager->persist($produit);
