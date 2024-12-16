@@ -36,7 +36,10 @@
 									<td class="px-4 py-3">{{stat.user.nom}}</td>
 									<td class="px-4 py-3">{{stat.user.email}}</td>
 									<td class="px-4 py-3">{{stat.user.id}}</td>
-									<td class="px-4 py-3"></td>
+									<td class="px-4 py-3">{{ stat.dateEmpreinte|date('d/m/Y') }}</td>
+                                    <td class="px-4 py-3">{{stat.dateRendu|date('d/m/Y')}}</td>
+                                    <td class="px-4 py-3">{{stat.retard}}</td>
+                                    <td class="px-4 py-3">{{stat.signalement}}</td>
 								</tr>
                         {% endfor %}
 						</tbody>

@@ -54,11 +54,16 @@ class HistoriquesFixtures extends Fixture implements DependentFixtureInterface
                 $historique->setIdUser($faker->randomElement($users));
 
                 // Date d'empreinte : entre la date d'achat du produit et aujourd'hui
+                // Date d'empreinte : entre la date d'achat du produit et aujourd'hui
                 $dateEmpreinte = $faker->dateTimeBetween($produit->getDateAchat(), 'now');
                 $historique->setDateEmpreinte($dateEmpreinte);
 
-                // Date de rendu : entre la date d'empreinte et une période future aléatoire (ou null)
-                $dateRendu = $faker->dateTimeBetween($dateEmpreinte, '+3 weeks');
+                // Calcul de la date limite pour la date de rendu (15 jours après la date d'empreinte)
+                $dateLimite = clone $dateEmpreinte; // Cloner pour ne pas modifier $dateEmpreinte
+                $dateLimite->modify('+15 days');
+
+                // Date de rendu : entre la date d'empreinte et 15 jours après la date d'empreinte
+                $dateRendu = $faker->dateTimeBetween($dateEmpreinte, $dateLimite);
 
                 // S'assurer que l'heure de la date de retour est à 00:00:00
                 $dateRendu->setTime(0, 0, 0);
@@ -66,11 +71,24 @@ class HistoriquesFixtures extends Fixture implements DependentFixtureInterface
                 // Définir la date de retour
                 $historique->setDateRendu($dateRendu);
 
+
                 // État initial (repris de l'état du produit, qui est garanti de correspondre à l'un des trois états)
                 $historique->setEtatInit($produit->getEtat());
 
-                // Signalement aléatoire (30 % de chance d'avoir un signalement)
                 $historique->setSignalement('Rien à signaler');
+
+                // Calculer le retard en jours
+                $interval = $dateEmpreinte->diff($dateRendu);
+                $daysDiff = $interval->days;
+
+                // Si la différence est supérieure à 10 jours, ajouter le retard
+                if ($daysDiff > 10) {
+                    $retard = $daysDiff -10;
+                    $historique->setRetard($retard);
+                } else {
+                    // Sinon, il n'y a pas de retard
+                    $historique->setRetard(0);
+                }
 
                 // Persister l'historique
                 $manager->persist($historique);
