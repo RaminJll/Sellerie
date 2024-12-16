@@ -17,11 +17,12 @@ class ProduitFixtures extends Fixture
 
         // Données des catégories et types de produit
         $categories = [
-            'cheval' => ['selle', 'mors', 'couverture', 'pansage'],
-            'écurie' => ['nourriture', 'clôture', 'accessoire'],
-            'cavalier' => ['polos', 'sweet', 'chaussette', 'botte'],
-            'cavalière' => ['polos', 'sweet', 'chaussette', 'botte'],
-            'enfant' => ['polos', 'sweet', 'chaussette', 'botte'],
+            'cheval' => ['selle', 'mors', 'couverture', 'pansage', 'licol', 'harnais', 'corde', 'bouchon'],
+            'écurie' => ['nourriture', 'clôture', 'accessoire', 'paillasse', 'seau', 'râteau', 'brosse', 'panier'],
+            'cavalier' => ['polos', 'sweet', 'chaussette', 'botte', 'casque', 'gants', 'pantalon', 'chemise'],
+            'cavalière' => ['polos', 'sweet', 'chaussette', 'botte', 'casque', 'gants', 'pantalon', 'chemise'],
+            'enfant' => ['polos', 'sweet', 'chaussette', 'botte', 'casquette', 'gants', 't-shirt', 'doudoune'],
+            'poney' => ['selle', 'mors', 'couverture', 'pansage', 'licol', 'harnais', 'corde', 'bouchon']
         ];
 
         $etats = [
@@ -43,7 +44,7 @@ class ProduitFixtures extends Fixture
 
                 $articleCount = 0; // Compteur d'articles dans l'étagère actuelle
 
-                for ($i = 1; $i <= 200; $i++) {
+                for ($i = 1; $i <= 60; $i++) {
                     $produit = new Produit();
 
                     // Nom du produit

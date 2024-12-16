@@ -30,7 +30,6 @@ class HistoriquesRepository extends ServiceEntityRepository
     }
     
 
-
 //    /**
 //     * @return Historiques[] Returns an array of Historiques objects
 //     */

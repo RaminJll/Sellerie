@@ -4,21 +4,20 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class HomeController extends AbstractController
+class AdminHomeController extends AbstractController
 {
-    #[Route('/home', name: 'app_home')]
-    #[IsGranted('ROLE_USER')]
+    #[Route('/admin/home', name: 'app_admin_home')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        /** @var \App\Entity\User|null $user */
-        $user = $this->getUser();
-    
-        return $this->render('home/home.html.twig');
+        return $this->render('admin/home/home.html.twig', [
+            'controller_name' => 'AdminHomeController',
+        ]);
     }
 }

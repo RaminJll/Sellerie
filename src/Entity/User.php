@@ -33,9 +33,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', enumType: UserRole::class)]
     private UserRole $role;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $nombre_prets = null;
-
     /**
      * @var Collection<int, Historiques>
      */
@@ -103,18 +100,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(UserRole $role): static
     {
         $this->role = $role;
-        return $this;
-    }
-
-    public function getNombrePrets(): ?int
-    {
-        return $this->nombre_prets;
-    }
-
-    public function setNombrePrets(?int $nombre_prets): static
-    {
-        $this->nombre_prets = $nombre_prets;
-
         return $this;
     }
 

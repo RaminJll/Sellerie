@@ -26,7 +26,7 @@ class Historiques
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_empreinte = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable:true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_rendu = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -34,6 +34,9 @@ class Historiques
 
     #[ORM\Column(enumType: ProduitEtat::class)]
     private ?ProduitEtat $etat_init = null;
+
+    #[ORM\Column]
+    private ?int $retard = null;
 
     public function getId(): ?int
     {
@@ -44,19 +47,19 @@ class Historiques
     {
         return $this->produit;
     }
-    
+
     public function getProduit(): ?Produit
     {
         return $this->getIdProduit(); // Appel au getter existant
     }
-    
+
     public function setIdProduit(?Produit $produit): static
     {
         $this->produit = $produit;
-    
+
         return $this;
     }
-    
+
     public function setProduit(?Produit $produit): static
     {
         return $this->setIdProduit($produit); // Appel au setter existant
@@ -68,6 +71,18 @@ class Historiques
     }
 
     public function setIdUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
@@ -118,6 +133,18 @@ class Historiques
     public function setEtatInit(ProduitEtat $etat_init): static
     {
         $this->etat_init = $etat_init;
+
+        return $this;
+    }
+
+    public function getRetard(): ?int
+    {
+        return $this->retard;
+    }
+
+    public function setRetard(int $retard): static
+    {
+        $this->retard = $retard;
 
         return $this;
     }

@@ -20,6 +20,7 @@ class HistoriquesController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function reserver(Request $request, ProduitRepository $produitRepository, EntityManagerInterface $entityManager): Response
     {
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
 
         // Validation CSRF
@@ -97,11 +98,8 @@ class HistoriquesController extends AbstractController
         }
 
         // Vérification de l'historique pour cet utilisateur et produit
-        $historique = $historiquesRepository->findOneBy(['user' => $user, 'produit' => $produit,]);
+        $historique = $historiquesRepository->findOneBy(['user' => $user, 'produit' => $produit]);
 
-        if (!$historique || $historique->getEtatInit()->value !== $etatInit) {
-            throw $this->createAccessDeniedException('Historique invalide ou non autorisé.');
-        }
 
         $signalementInput = (string) $request->request->get('signalement');
 
@@ -117,12 +115,19 @@ class HistoriquesController extends AbstractController
         // Enregistrer le signalement
         $historique->setSignalement($signalementInput);
 
+        $dateEmpreinte = $historique->getDateEmpreinte();
+        $dateRendu = new \DateTime();
+        $diff = $dateEmpreinte->diff($dateRendu);
+    
+        if ($diff->days > 10) {
+            $retard = $diff->days - 10;
+            $historique->setRetard($retard);
+        } else {
+            $historique->setRetard(0);
+        }
 
         // Mettre à jour l'état du produit
         $produit->setEtat(ProduitEtat::from($etatInit));
-
-        // Mettre à jour la date de retour dans l'historique
-        $historique->setDateRendu((new \DateTime())->setTime(0, 0, 0));
 
         $entityManager->persist($produit);
         $entityManager->persist($historique);
