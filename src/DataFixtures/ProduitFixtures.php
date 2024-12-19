@@ -60,8 +60,11 @@ class ProduitFixtures extends Fixture
                     // Date d'achat aléatoire (moins de 3 ans à partir d'aujourd'hui)
                     $produit->setDateAchat($faker->dateTimeBetween('-3 years', 'now'));
 
-                    // Planning de maintenance (entre 1 et 6 mois à partir d'aujourd'hui)
-                    $produit->setPlanning($faker->dateTimeBetween('+1 month', '+6 months'));
+                    if (mt_rand(1, 40) === 1) {
+                        $produit->setPlanning(new \DateTime('today'));
+                    } else {
+                        $produit->setPlanning($faker->dateTimeBetween('+1 month', '+6 months'));
+                    }
 
                     // Catégorie rayon (identique à la catégorie)
                     $produit->setCategorieRayon($categorie);

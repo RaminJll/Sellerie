@@ -36,4 +36,15 @@ class ProduitRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult(); // Retourne une liste d'entités Produit
     }
+
+    public function findAllMaintenance()
+    {
+        $now = new \DateTime(); // Récupère la date actuelle
+
+        return $this->createQueryBuilder('p')
+            ->where('p.planning <= :now') // Condition pour vérifier que la date de planning est dans le passé ou aujourd'hui
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getResult(); // Récupère les résultats sous forme d'objets
+    }
 }

@@ -19,18 +19,16 @@ class ReparationsController extends AbstractController
 {
     #[Route('/reparations', name: 'app_reparations')]
     #[IsGranted('ROLE_ADMIN')]
-    public function reparation(
-        HistoriquesRepository $historiquesRepository,
-        ReparationsRepository $reparationsRepository
-    ): Response {
+    public function reparation(HistoriquesRepository $historiquesRepository, ReparationsRepository $reparationsRepository): Response
+    {
         $allReparations = $historiquesRepository->findAllReparations();
         $reparationsData = [];
-    
+
         foreach ($allReparations as $historique) {
             $produit = $historique->getProduit();
-    
+
             $reparation = $reparationsRepository->findOneBy(['produit' => $produit]);
-    
+
             $reparationsData[] = [
                 'produit' => $produit,
                 'user' => $historique->getUser(),
@@ -42,12 +40,12 @@ class ReparationsController extends AbstractController
                 'dateFinReparation' => $reparation ? $reparation->getDateFinReparation() : null,
             ];
         }
-    
-        return $this->render('admin/gestion_produits/reparation.html.twig', [
+
+        return $this->render('admin/gestions_produits/reparation.html.twig', [
             'reparationsData' => $reparationsData,
         ]);
     }
-    
+
 
     #[Route('/reparations_form/{produitId}', name: 'formulaire_reparation')]
     #[IsGranted('ROLE_ADMIN')]
@@ -61,35 +59,34 @@ class ReparationsController extends AbstractController
 
         $reparation = new Reparations();
         $reparation->setIdProduit($produit);
-    
+
 
         $form = $this->createForm(ReparationsType::class, $reparation);
         $form->handleRequest($request);
-    
+
         if ($request->isMethod('POST') && $form->isSubmitted() && $form->isValid()) {
             if ($reparation->getCoutReparation() <= 0) {
                 throw $this->createAccessDeniedException('Le coût de réparation doit être supérieur à zéro.');
             }
-    
-            $produit->setEtat(ProduitEtat::Reparation);
 
             $reparation->setEtatInit($produit->getEtat());
-    
+            
+            $produit->setEtat(ProduitEtat::Reparation);
+
             // Enregistrement en base
             $entityManager->persist($produit);
             $entityManager->persist($reparation);
             $entityManager->flush();
-    
+
             // Redirection après succès
             $this->addFlash('success', 'La réparation a été ajoutée avec succès et l\'état du produit a été mis à jour !');
             return $this->redirectToRoute('app_reparations');
         }
-    
+
         // Retourner la vue
         return $this->render('admin/gestion_produits/reparation_form.html.twig', [
             'form' => $form->createView(),
             'produit' => $produit,
         ]);
     }
-    
 }

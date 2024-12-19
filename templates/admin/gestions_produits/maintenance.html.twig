@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{{dump(maintenancesData)}}
+	<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
+			<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
+				Liste des produits en attente de maintenance ou en maintenance. Pour limiter la liste sur les produits qui ne sont pas encore envoyé en maintenance tapez "En attente de maintenance" dans la barre de recherche.
+			</p>
+		</div>
+		<div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+			<div class="flex justify-between items-center mb-4">
+				<div class="relative">
+					<input type="text" id="searchInput" class="search-bar w-full px-4 py-2 text-sm text-gray-900 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:focus:ring-blue-500" placeholder="Search..." value="En attente de maintenance"/>
+				</div>
+			</div>
+
+			<div class="overflow-x-auto">
+				<table id="dataTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-4 py-3">Nom du produit</th>
+							<th scope="col" class="px-4 py-3">Id du produit</th>
+							<th scope="col" class="px-4 py-3">Catégorie du produit</th>
+							<th scope="col" class="px-4 py-3">Type de produit</th>
+							<th scope="col" class="px-4 py-3">Description</th>
+							<th scope="col" class="px-4 py-3">Coût de Maintenance</th>
+							<th scope="col" class="px-4 py-3">Date de Fin de Maintenance</th>
+							<th scope="col" class="px-4 py-3">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for data in maintenancesData %}
+							<tr class="border-b dark:border-gray-700">
+								<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ data.produit.nom }}</td>
+								<td class="px-4 py-3">{{ data.produit.id }}</td>
+								<td class="px-4 py-3">{{ data.categorie }}</td>
+								<td class="px-4 py-3">{{ data.typeProduit }}</td>
+								<td class="px-4 py-3">{{ data.description ? data.description : 'En attente de maintenance' }}</td>
+								<td class="px-4 py-3">{{ data.coutMaintenance ? data.coutMaintenance ~ ' €' : 'En attente de maintenance' }}</td>
+								<td class="px-4 py-3">{{ data.dateFinMaintenance ? data.dateFinMaintenance | date('d/m/Y') : 'En attente de maintenance' }}</td>
+								<td class="px-4 py-3">
+									{% if data.dateFinMaintenance %}
+										<button type="button" class="text-white bg-red-500 hover:bg-red-700 px-3 py-2 rounded" disabled>
+											Envoyer
+										</button>
+									{% else %}
+										<a href="{{ path('formulaire_maintenance', {'produitId': data.produit.id}) }}" class="text-white bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded">
+											Envoyer
+										</a>
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</section>
+{% endblock %}
