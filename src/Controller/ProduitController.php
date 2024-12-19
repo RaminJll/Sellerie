@@ -49,6 +49,7 @@ class ProduitController extends AbstractController
                     }
                 }
             }
+        }
     
         $entityManager->flush();
     
@@ -61,6 +62,4 @@ class ProduitController extends AbstractController
             'type' => $type,
         ]);
     }
-    
-    
 }
