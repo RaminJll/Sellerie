@@ -29,6 +29,19 @@ class HistoriquesRepository extends ServiceEntityRepository
             ->getResult();
     }
     
+    public function findAllReparations()
+    {
+        return $this->createQueryBuilder('h')
+            ->leftJoin('h.produit', 'p')
+            ->addSelect('p')
+            ->leftJoin('h.user', 'u')
+            ->addSelect('u')
+            ->where('h.signalement = :signalement')
+            ->setParameter('signalement', 'Probleme detecte')
+            ->getQuery()
+            ->getResult();
+    }
+    
 
 //    /**
 //     * @return Historiques[] Returns an array of Historiques objects

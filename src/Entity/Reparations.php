@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ProduitEtat;
 use App\Repository\ReparationsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,14 +22,14 @@ class Reparations
     #[ORM\Column(length: 255)]
     private ?string $description_probleme = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_signalement = null;
-
     #[ORM\Column]
     private ?float $cout_reparation = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $reparation_fini = null;
+    private ?\DateTimeInterface $date_fin_reparation = null;
+
+    #[ORM\Column(enumType: ProduitEtat::class)]
+    private ?ProduitEtat $etat_init = null;
 
     public function getId(): ?int
     {
@@ -59,18 +60,6 @@ class Reparations
         return $this;
     }
 
-    public function getDateSignalement(): ?\DateTimeInterface
-    {
-        return $this->date_signalement;
-    }
-
-    public function setDateSignalement(\DateTimeInterface $date_signalement): static
-    {
-        $this->date_signalement = $date_signalement;
-
-        return $this;
-    }
-
     public function getCoutReparation(): ?float
     {
         return $this->cout_reparation;
@@ -83,14 +72,26 @@ class Reparations
         return $this;
     }
 
-    public function getDureeReparation(): ?\DateTimeInterface
+    public function getDateFinReparation(): ?\DateTimeInterface
     {
-        return $this->reparation_fini;
+        return $this->date_fin_reparation;
     }
 
-    public function setDureeReparation(\DateTimeInterface $reparation_fini): static
+    public function setDateFinReparation(\DateTimeInterface $date_fin_reparation): static
     {
-        $this->reparation_fini = $reparation_fini;
+        $this->date_fin_reparation = $date_fin_reparation;
+
+        return $this;
+    }
+
+    public function getEtatInit(): ?ProduitEtat
+    {
+        return $this->etat_init;
+    }
+
+    public function setEtatInit(ProduitEtat $etat_init): static
+    {
+        $this->etat_init = $etat_init;
 
         return $this;
     }

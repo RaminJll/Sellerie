@@ -1,51 +1,58 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{dump(statistiques)}}
 	<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
 		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
 			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
 			<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
-				Explore the whole collection of open-source web components and elements built with the utility classes from Tailwind
+				Statistiques sur les utilisateurs avec les produits
 			</p>
 		</div>
-		<div
-			class="mx-auto max-w-screen-xl px-4 lg:px-12">
-			<!-- Start coding here -->
-			<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-				<div class="overflow-x-auto">
-					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-							<tr>
-								<th scope="col" class="px-4 py-3">Nom du produit</th>
-								<th scope="col" class="px-4 py-3">Id du produit</th>
-								<th scope="col" class="px-4 py-3">Nom d'utilisateur</th>
-								<th scope="col" class="px-4 py-3">Email</th>
-								<th scope="col" class="px-4 py-3">Id de l'utilisateur</th>
-								<th scope="col" class="px-4 py-3">Date d'emprunt</th>
-								<th scope="col" class="px-4 py-3">Date de retour</th>
-                                <th scope="col" class="px-4 py-3">Retard</th>
-                                <th scope="col" class="px-4 py-3">Signalement</th>
-							</tr>
-						</thead>
-						<tbody>
-                        {% for stat in statistiques %}
-								<tr class="border-b dark:border-gray-700">
-									<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{stat.produit.nom}}</td>
-									<td class="px-4 py-3">{{stat.produit.id}}</td>
-									<td class="px-4 py-3">{{stat.user.nom}}</td>
-									<td class="px-4 py-3">{{stat.user.email}}</td>
-									<td class="px-4 py-3">{{stat.user.id}}</td>
-									<td class="px-4 py-3">{{ stat.dateEmpreinte|date('d/m/Y') }}</td>
-                                    <td class="px-4 py-3">{{stat.dateRendu|date('d/m/Y')}}</td>
-                                    <td class="px-4 py-3">{{stat.retard}}</td>
-                                    <td class="px-4 py-3">{{stat.signalement}}</td>
-								</tr>
-                        {% endfor %}
-						</tbody>
-					</table>
+		<div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+			<div
+				class="flex justify-between items-center mb-4">
+				<!-- Recherche -->
+				<div class="relative">
+					<input type="text" id="searchInput" class="search-bar w-full px-4 py-2 text-sm text-gray-900 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:focus:ring-blue-500" placeholder="Search..."/>
 				</div>
-				<!-- Pagination dynamique -->
+				<div class="relative space-x-2">
+					<button type="button" onclick="sortTable(5)" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg transition duration-200">Trier par date d'emprunt</button>
+					<button type="button" onclick="sortTable(6)" class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-lg transition duration-200">Trier par date de retour</button>
+					<button type="button" onclick="sortTable(7)" class="px-4 py-2 text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 rounded-lg transition duration-200">Trier par retard</button>
+				</div>
+			</div>
+
+			<div class="overflow-x-auto">
+				<table id="dataTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-4 py-3">Nom du produit</th>
+							<th scope="col" class="px-4 py-3">Id du produit</th>
+							<th scope="col" class="px-4 py-3">Nom d'utilisateur</th>
+							<th scope="col" class="px-4 py-3">Email</th>
+							<th scope="col" class="px-4 py-3">Id de l'utilisateur</th>
+							<th scope="col" class="px-4 py-3">Date d'emprunt</th>
+							<th scope="col" class="px-4 py-3">Date de retour</th>
+							<th scope="col" class="px-4 py-3">Retard</th>
+							<th scope="col" class="px-4 py-3">Signalement</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for stat in statistiques %}
+							<tr class="border-b dark:border-gray-700">
+								<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ stat.produit.nom }}</td>
+								<td class="px-4 py-3">{{ stat.produit.id }}</td>
+								<td class="px-4 py-3">{{ stat.user.nom }}</td>
+								<td class="px-4 py-3">{{ stat.user.email }}</td>
+								<td class="px-4 py-3">{{ stat.user.id }}</td>
+								<td class="px-4 py-3">{{ stat.dateEmpreinte | date('d/m/Y') }}</td>
+								<td class="px-4 py-3">{{ stat.dateRendu | date('d/m/Y') }}</td>
+								<td class="px-4 py-3">{{ stat.retard }}</td>
+								<td class="px-4 py-3">{{ stat.signalement }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</section>

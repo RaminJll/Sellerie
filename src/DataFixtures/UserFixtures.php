@@ -42,13 +42,21 @@ class UserFixtures extends Fixture
     
         // Ajout d'un utilisateur Admin spécifique
         $adminUser = new User();
-        $adminUser->setNom("admin");
+        $adminUser->setNom("patrick");
         $adminUser->setEmail("admin@gmail.com");
         $adminUser->setPassword($this->hasher->hashPassword($adminUser, 'password'));
-        $adminUser->setRole(UserRole::ADMIN);  // L'utilisateur admin a le rôle ADMIN
+        $adminUser->setRole(UserRole::ADMIN);
     
         // Persister l'utilisateur Admin
         $manager->persist($adminUser);
+
+        $normalUser = new User();
+        $normalUser->setNom("jean");
+        $normalUser->setEmail("jean@gmail.com");
+        $normalUser->setPassword($this->hasher->hashPassword($normalUser, 'password'));
+        $normalUser->setRole(UserRole::USER);
+
+        $manager->persist($normalUser);
     
         // Sauvegarder tous les utilisateurs dans la base de données
         $manager->flush();

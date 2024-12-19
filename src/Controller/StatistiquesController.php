@@ -6,10 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\HistoriquesRepository;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class StatistiquesController extends AbstractController
 {
     #[Route('/statistiques', name: 'app_statistiques')]
+    #[IsGranted('ROLE_ADMIN')]
     public function allhistorique(HistoriquesRepository $historiquesRepository): Response
     {
         $statistiques = $historiquesRepository->findAll();

@@ -29,8 +29,8 @@ class ProduitFixtures extends Fixture
             ProduitEtat::Neuf,
             ProduitEtat::BonEtat,
             ProduitEtat::USE,
-            ProduitEtat::Reparation,
-            ProduitEtat::HorsService,
+            //ProduitEtat::Reparation,
+            //ProduitEtat::HorsService,
         ];
 
         foreach ($categories as $categorie => $types) {
@@ -44,7 +44,7 @@ class ProduitFixtures extends Fixture
 
                 $articleCount = 0; // Compteur d'articles dans l'étagère actuelle
 
-                for ($i = 1; $i <= 60; $i++) {
+                for ($i = 1; $i <= 30; $i++) {
                     $produit = new Produit();
 
                     // Nom du produit

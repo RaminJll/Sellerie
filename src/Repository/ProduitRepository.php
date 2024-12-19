@@ -29,11 +29,11 @@ class ProduitRepository extends ServiceEntityRepository
     public function findProduitsByTypeAndCategory(string $category, string $type)
     {
         return $this->createQueryBuilder('p')
-            ->select('p.id, p.nom, p.categorie, p.type_produit, p.etat, p.categorie_rayon, p.etagere')
             ->where('p.type_produit = :type')
             ->setParameter('type', $type)
             ->andWhere('p.categorie = :categorie')
             ->setParameter('categorie', $category)
-            ->getQuery();
+            ->getQuery()
+            ->getResult(); // Retourne une liste d'entités Produit
     }
 }

@@ -5,15 +5,21 @@
 		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
 			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
 			<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
-				Explore the whole collection of open-source web components and elements built with the utility classes from Tailwind
+				Voici une liste de tous les produits disponibles pour affiner votre recherche, vous pouvez utiliser la barre de recherche.
 			</p>
 		</div>
-		<div
-			class="mx-auto max-w-screen-xl px-4 lg:px-12">
+		<div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+			<div
+				class="flex justify-between items-center mb-4">
+				<!-- Recherche -->
+				<div class="relative">
+					<input type="text" id="searchInput" class="search-bar w-full px-4 py-2 text-sm text-gray-900 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:focus:ring-blue-500" placeholder="Search..."/>
+				</div>
+			</div>
 			<!-- Start coding here -->
 			<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
 				<div class="overflow-x-auto">
-					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<table id="dataTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
 						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 							<tr>
 								<th scope="col" class="px-4 py-3">Nom</th>
@@ -30,13 +36,13 @@
 								<tr class="border-b dark:border-gray-700">
 									<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ produit.nom }}</td>
 									<td class="px-4 py-3">{{ produit.categorie }}</td>
-									<td class="px-4 py-3">{{ produit.type_produit }}</td>
+									<td class="px-4 py-3">{{ produit.typeProduit }}</td>
 									<td class="px-4 py-3">{{ produit.etat.value }}</td>
-									<td class="px-4 py-3">{{ produit.categorie_rayon }}</td>
+									<td class="px-4 py-3">{{ produit.categorieRayon }}</td>
 									<td class="px-4 py-3">{{ produit.etagere }}</td>
 									<td class="px-4 py-3">
 										<form method="post" action="{{ path('produit_reserver')}}">
-										<input type="hidden" name="_csrf_token" value="{{ csrf_token('produit_reserver') }}">
+											<input type="hidden" name="_csrf_token" value="{{ csrf_token('produit_reserver') }}">
 											<input type="hidden" name="id" value="{{ produit.id }}">
 											{% if produit.etat.value == 'hors service' or produit.etat.value == 'en reparation' %}
 												<button class="text-white bg-red-500 hover:bg-red-700 px-3 py-2 rounded" disabled>

@@ -23,35 +23,30 @@ class HistoriquesController extends AbstractController
         /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
 
-        // Validation CSRF
         $token = $request->request->get('_csrf_token');
         if (!$this->isCsrfTokenValid('produit_reserver', $token)) {
             throw $this->createAccessDeniedException('Requête non valide.');
         }
 
-        // Récupérer l'ID du produit
         $produitId = (int) $request->request->get('id');
         $produit = $produitRepository->find($produitId);
         if (!$produit) {
             throw $this->createNotFoundException('Produit introuvable.');
         }
 
-        // Créer l'historique
         $reservation = new Historiques();
         $reservation->setIdUser($user);
         $reservation->setIdProduit($produit);
         $reservation->setDateEmpreinte((new \DateTime())->setTime(0, 0, 0));
-        //$reservation->setDateRendu((new \DateTime())->setTime(0, 0, 0));
         $reservation->setSignalement(null);
         $reservation->setEtatInit($produit->getEtat());
+        $reservation->setRetard(0);
 
-        // Mettre à jour l'état du produit
         $produit->setEtat(ProduitEtat::HorsService);
         $entityManager->persist($reservation);
         $entityManager->persist($produit);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Réservation effectuée avec succès, le produit est maintenant hors service.');
         return $this->redirectToRoute('app_historiques');
     }
 
@@ -78,44 +73,43 @@ class HistoriquesController extends AbstractController
     {
         $user = $this->getUser();
 
-        // Validation CSRF
         $token = $request->request->get('_csrf_token');
         if (!$this->isCsrfTokenValid('produit_rendre', $token)) {
             throw $this->createAccessDeniedException('Requête non valide.');
         }
 
-        // Récupérer l'ID du produit
         $produitId = (int) $request->request->get('id');
         $produit = $produitRepository->find($produitId);
         if (!$produit) {
             throw $this->createNotFoundException('Produit introuvable.');
         }
 
-        // Récupérer l'état initial depuis la requête
         $etatInit = $request->request->get('etat_init');
         if (!in_array($etatInit, array_column(ProduitEtat::cases(), 'value'))) {
             throw $this->createNotFoundException('État initial invalide.');
         }
 
-        // Vérification de l'historique pour cet utilisateur et produit
         $historique = $historiquesRepository->findOneBy(['user' => $user, 'produit' => $produit]);
 
 
         $signalementInput = (string) $request->request->get('signalement');
 
-        if ($signalementInput == null || $signalementInput == '') {
-            $signalementInput = 'Rien à signaler';
+        if ($signalementInput === 'Rien a signaler') {
+            $signalementInput = 'Rien a signaler';
+        }
+        elseif ($signalementInput === 'Probleme detecte') {
+            $signalementInput = 'Probleme detecte';
+        }
+        else{
+            throw $this->createNotFoundException('Mauvais signalement.');
         }
 
-        // Optionnel : Validation stricte (texte uniquement, sans caractères spéciaux)
-        if (!preg_match('/^[\p{L}\p{N}\p{P}\p{Z}]+$/u', $signalementInput)) {
-            throw new \InvalidArgumentException('Le signalement contient des caractères non autorisés.');
-        }
 
-        // Enregistrer le signalement
         $historique->setSignalement($signalementInput);
 
         $dateEmpreinte = $historique->getDateEmpreinte();
+        $historique->setDateRendu((new \DateTime())->setTime(0, 0, 0));
+
         $dateRendu = new \DateTime();
         $diff = $dateEmpreinte->diff($dateRendu);
     
@@ -126,14 +120,12 @@ class HistoriquesController extends AbstractController
             $historique->setRetard(0);
         }
 
-        // Mettre à jour l'état du produit
         $produit->setEtat(ProduitEtat::from($etatInit));
 
         $entityManager->persist($produit);
         $entityManager->persist($historique);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Produit rendu avec succès.');
         return $this->redirectToRoute('app_historiques');
     }
 }
