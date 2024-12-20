@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
+			<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
+				Liste des utilisateurs. Vous pouvez utiliser la recherche pour filtrer la liste ou pour trouver un utilisateur spécifique.
+			</p>
+		</div>
+		<div class="flex flex-col md:h-screen lg:py-0 mx-auto max-w-screen-xl px-4 lg:px-12">
+			<div class="flex justify-between items-center mb-4">
+				<div class="relative">
+					<input type="text" id="searchInput" class="search-bar w-full px-4 py-2 text-sm text-gray-900 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:focus:ring-blue-500" placeholder="Search..."/>
+				</div>
+			</div>
+
+			<div class="overflow-x-auto">
+				<table id="dataTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-4 py-3">Nom de l'utilisateur</th>
+							<th scope="col" class="px-4 py-3">Id de l'utilisateur</th>
+							<th scope="col" class="px-4 py-3">Email</th>
+							<th scope="col" class="px-4 py-3">rôle</th>
+							<th scope="col" class="px-4 py-3">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for data in users %}
+							<tr class="border-b dark:border-gray-700">
+								<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ data.nom }}</td>
+								<td class="px-4 py-3">{{ data.id }}</td>
+								<td class="px-4 py-3">{{ data.email }}</td>
+								<td class="px-4 py-3">{{ data.role.name }}</td>
+								<td class="px-4 py-3">
+									<a href="{{ path('delete_personnels', {'id': data.id}) }}" class="text-white bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded">
+										Supprimer
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</section>
+{% endblock %}

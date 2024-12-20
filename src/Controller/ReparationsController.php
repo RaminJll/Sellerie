@@ -84,7 +84,7 @@ class ReparationsController extends AbstractController
         }
 
         // Retourner la vue
-        return $this->render('admin/gestion_produits/reparation_form.html.twig', [
+        return $this->render('admin/gestions_produits/reparation_form.html.twig', [
             'form' => $form->createView(),
             'produit' => $produit,
         ]);
