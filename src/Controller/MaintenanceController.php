@@ -77,7 +77,6 @@ class MaintenanceController extends AbstractController
             $entityManager->flush();
 
             // Redirection après succès
-            $this->addFlash('success', 'La maintenance a été ajoutée avec succès et l\'état du produit a été mis à jour !');
             return $this->redirectToRoute('app_maintenance');
         }
 

@@ -18,6 +18,6 @@ html, body {
   
   /* Placer le footer en bas de la page */
   footer {
-    margin-top: auto; /* Pousse le footer au bas de la page */
+    margin-top: 0px; /* Pousse le footer au bas de la page */
   }
   
