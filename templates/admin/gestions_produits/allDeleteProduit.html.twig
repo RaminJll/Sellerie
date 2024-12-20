@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
+			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
+			<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
+				Voici une liste de tous les produits. Vous pouvez utiliser la recherche pour filtrer la liste ou pour trouver un produit spécifique.
+			</p>
+			{% for message in app.flashes('success') %}
+				<div class="text-white alert alert-success">{{ message }}</div>
+			{% endfor %}
+		</div>
+		<div class="flex flex-col md:h-screen lg:py-0 mx-auto max-w-screen-xl px-4 lg:px-12">
+			<div
+				class="flex justify-between items-center mb-4">
+				<div class="relative">
+					<input type="text" id="searchInput" class="search-bar w-full px-4 py-2 text-sm text-gray-900 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:focus:ring-blue-500" placeholder="Search..."/>
+				</div>
+			</div>
+			<!-- Start coding here -->
+			<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+				<div class="overflow-x-auto">
+					<table id="dataTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th scope="col" class="px-4 py-3">Nom</th>
+								<th scope="col" class="px-4 py-3">Id</th>
+								<th scope="col" class="px-4 py-3">Category</th>
+								<th scope="col" class="px-4 py-3">Type de produit</th>
+								<th scope="col" class="px-4 py-3">Statut</th>
+								<th scope="col" class="px-4 py-3">Catégorie de rayon</th>
+								<th scope="col" class="px-4 py-3">Étagère</th>
+								<th scope="col" class="px-4 py-3">Réserver</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for produit in produits %}
+								<tr class="border-b dark:border-gray-700">
+									<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ produit.nom }}</td>
+									<td class="px-4 py-3">{{ produit.id }}</td>
+									<td class="px-4 py-3">{{ produit.categorie }}</td>
+									<td class="px-4 py-3">{{ produit.typeProduit }}</td>
+									<td class="px-4 py-3">{{ produit.etat.value }}</td>
+									<td class="px-4 py-3">{{ produit.categorieRayon }}</td>
+									<td class="px-4 py-3">{{ produit.etagere }}</td>
+									<td class="px-4 py-3">
+										<a href="{{ path('delete_produit', {'id': produit.id}) }}" class="text-white bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded">
+											Supprimer
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- Pagination dynamique -->
+				<div
+					class="pagination flex flex-wrap items-center space-x-1 overflow-x-auto">
+					{# Affichage des pages #}
+					{% for page in 1..produits.pageCount %}
+						{% if page == produits.currentPageNumber %}
+							<span class="text-sm py-2 px-3 font-semibold leading-tight text-primary-600 bg-primary-50 border border-primary-300 rounded">
+								{{ page }}
+							</span>
+						{% else %}
+							<a href="{{ path('allUpdate_produit', { page: page }) }}" class="text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white rounded">
+								{{ page }}
+							</a>
+						{% endif %}
+					{% endfor %}
+				</div>
+
+
+			</div>
+		</div>
+	</section>
+{% endblock %}

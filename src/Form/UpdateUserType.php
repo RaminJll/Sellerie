@@ -20,17 +20,17 @@ class UpdateUserType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
                 'required' => false,
-                'empty_data' => $options['data']->getNom(), // Si vide, garde la valeur actuelle
+                'empty_data' => $options['data']->getNom(),
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'required' => false,
-                'empty_data' => $options['data']->getEmail(), // Si vide, garde la valeur actuelle
+                'empty_data' => $options['data']->getEmail(),
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe',
                 'required' => false,
-                'empty_data' => $options['data']->getPassword(), // Ne met pas à jour si vide
+                'empty_data' => $options['data']->getPassword(),
             ])
             ->add('role', ChoiceType::class, [
                 'label' => 'Rôle',
@@ -38,7 +38,7 @@ class UpdateUserType extends AbstractType
                     'Admin' => UserRole::ADMIN,
                     'Utilisateur' => UserRole::USER,
                 ],
-                'empty_data' => $options['data']->getRole(), // Si vide, garde la valeur actuelle
+                'empty_data' => $options['data']->getRole(),
             ]);
     }
 

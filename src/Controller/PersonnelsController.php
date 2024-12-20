@@ -19,7 +19,6 @@ class PersonnelsController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function personnels(): Response
     {
-
         return $this->render('admin/gestions_personnels/allPersonnels.html.twig');
     }
 
@@ -152,6 +151,5 @@ class PersonnelsController extends AbstractController
         // Rediriger vers la liste des utilisateurs
         return $this->redirectToRoute('all_deletePersonnels');
     }
-
 
 }

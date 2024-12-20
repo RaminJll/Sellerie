@@ -38,7 +38,7 @@ class MaintenanceController extends AbstractController
             ];
         }
     
-        return $this->render('admin/gestions_produits/maintenance.html.twig', [
+        return $this->render('admin/maintenances/maintenance.html.twig', [
             'maintenancesData' => $maintenancesData,
         ]);
     }
@@ -81,7 +81,7 @@ class MaintenanceController extends AbstractController
         }
 
         // Retourner la vue
-        return $this->render('admin/gestions_produits/maintenance_form.html.twig', [
+        return $this->render('admin/maintenances/maintenance_form.html.twig', [
             'form' => $form->createView(),
             'produit' => $produit,
         ]);
