@@ -61,7 +61,7 @@ class ProduitFixtures extends Fixture
                     $produit->setDateAchat($faker->dateTimeBetween('-3 years', 'now'));
 
                     if (mt_rand(1, 40) === 1) {
-                        $produit->setPlanning(new \DateTime('today'));
+                        $produit->setPlanning(new DateTime('today'));
                     } else {
                         $produit->setPlanning($faker->dateTimeBetween('+1 month', '+6 months'));
                     }

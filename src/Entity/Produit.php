@@ -49,12 +49,6 @@ class Produit
     private Collection $statistiques;
 
     /**
-     * @var Collection<int, Notifications>
-     */
-    #[ORM\OneToMany(targetEntity: Notifications::class, mappedBy: 'id_produit')]
-    private Collection $notifications;
-
-    /**
      * @var Collection<int, Maintenances>
      */
     #[ORM\OneToMany(targetEntity: Maintenances::class, mappedBy: 'id_produit')]
@@ -76,7 +70,6 @@ class Produit
     {
         $this->historiques = new ArrayCollection();
         $this->statistiques = new ArrayCollection();
-        $this->notifications = new ArrayCollection();
         $this->maintenances = new ArrayCollection();
         $this->reparations = new ArrayCollection();
     }
@@ -212,36 +205,6 @@ class Produit
             // set the owning side to null (unless already changed)
             if ($statistique->getIdProduit() === $this) {
                 $statistique->setIdProduit(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Notifications>
-     */
-    public function getNotifications(): Collection
-    {
-        return $this->notifications;
-    }
-
-    public function addNotification(Notifications $notification): static
-    {
-        if (!$this->notifications->contains($notification)) {
-            $this->notifications->add($notification);
-            $notification->setIdProduit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNotification(Notifications $notification): static
-    {
-        if ($this->notifications->removeElement($notification)) {
-            // set the owning side to null (unless already changed)
-            if ($notification->getIdProduit() === $this) {
-                $notification->setIdProduit(null);
             }
         }
 
