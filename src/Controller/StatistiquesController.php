@@ -10,18 +10,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class StatistiquesController extends AbstractController
 {
+
+// Action qui récupère toutes les données des historiques pour générer des statistiques. 
+// Seuls les utilisateurs ayant le rôle "ROLE_ADMIN" peuvent accéder à cette page.
+// Les données sont récupérées via le repository HistoriquesRepository. 
+// Le code parcourt ensuite ces historiques pour accéder aux informations du produit et de l'utilisateur associé.
     #[Route('/statistiques', name: 'app_statistiques')]
     #[IsGranted('ROLE_ADMIN')]
     public function allhistorique(HistoriquesRepository $historiquesRepository): Response
     {
         $statistiques = $historiquesRepository->findAll();
 
-        // Vous pouvez maintenant accéder aux données du produit et de l'utilisateur
         foreach ($statistiques as $historique) {
-            // Accéder aux données du produit
             $produit = $historique->getIdProduit();
 
-            // Accéder aux données de l'utilisateur
             $user = $historique->getUser();
         }
 

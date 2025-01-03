@@ -12,6 +12,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
+
+// Action qui gère l'inscription d'un nouvel utilisateur.
+// Elle affiche un formulaire d'inscription, traite les données soumises, 
+// hash le mot de passe et enregistre l'utilisateur dans la base de données.
+// Après l'inscription, l'utilisateur est redirigé vers la page de connexion.
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {

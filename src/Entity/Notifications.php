@@ -21,8 +21,14 @@ class Notifications
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_notification = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $type_produit_manquant = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $categorie = null;
+
+    #[ORM\ManyToOne(inversedBy: 'notifications')]
+    private ?Produit $produit = null;
 
     public function getId(): ?int
     {
@@ -61,6 +67,30 @@ class Notifications
     public function setTypeProduitManquant(string $type_produit_manquant): static
     {
         $this->type_produit_manquant = $type_produit_manquant;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(string $categorie): static
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getProduit(): ?Produit
+    {
+        return $this->produit;
+    }
+
+    public function setProduit(?Produit $produit): static
+    {
+        $this->produit = $produit;
 
         return $this;
     }

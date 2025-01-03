@@ -15,6 +15,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PersonnelsController extends AbstractController
 {
+// Action qui affiche la liste de tous les personnels (utilisateurs).
+// Accessible uniquement par les administrateurs (ROLE_ADMIN).
     #[Route('/personnels', name: 'app_personnels')]
     #[IsGranted('ROLE_ADMIN')]
     public function personnels(): Response
@@ -22,6 +24,8 @@ class PersonnelsController extends AbstractController
         return $this->render('admin/gestions_personnels/allPersonnels.html.twig');
     }
 
+// Action qui permet d'ajouter un nouvel utilisateur.
+// Elle affiche un formulaire et enregistre l'utilisateur dans la base de données après validation.
     #[Route('/ajoutUser', name: 'ajout_personnels')]
     #[IsGranted('ROLE_ADMIN')]
     public function ajoutUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
@@ -40,7 +44,6 @@ class PersonnelsController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Add flash message
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès !');
 
             return $this->redirectToRoute('ajout_personnels');
@@ -51,6 +54,8 @@ class PersonnelsController extends AbstractController
         ]);
     }
 
+// Action qui affiche la liste de tous les utilisateurs afin qu'ils puissent être mis à jour.
+// Accessible uniquement par les administrateurs (ROLE_ADMIN).
     #[Route('/allUserUpdate', name: 'all_updatePersonnels')]
     #[IsGranted('ROLE_ADMIN')]
     public function allUserUpdate(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
@@ -63,27 +68,21 @@ class PersonnelsController extends AbstractController
     }
 
 
+// Action qui permet de modifier les informations d'un utilisateur spécifique.
+// Elle vérifie si l'utilisateur existe et affiche un formulaire de mise à jour.
     #[Route('/updateUser/{id}', name: 'update_personnels')]
     #[IsGranted('ROLE_ADMIN')]
-    public function modifierUser(
-        int $id,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
-    ): Response {
-        // Récupérer l'utilisateur
+    public function modifierUser(int $id, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response {
         $user = $entityManager->getRepository(User::class)->find($id);
 
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé');
         }
 
-        // Créer le formulaire et préremplir avec les données existantes
         $form = $this->createForm(UpdateUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifier les champs soumis et ne modifier que si une nouvelle valeur est fournie
             if ($form->get('nom')->getData() !== null && $form->get('nom')->getData() !== '') {
                 $user->setNom($form->get('nom')->getData());
             }
@@ -92,7 +91,6 @@ class PersonnelsController extends AbstractController
                 $user->setEmail($form->get('email')->getData());
             }
 
-            // Gestion spécifique pour le mot de passe
             $password = $form->get('password')->getData();
             if ($password !== null && $password !== '') {
                 $hashedPassword = $passwordHasher->hashPassword($user, $password);
@@ -103,10 +101,8 @@ class PersonnelsController extends AbstractController
                 $user->setRole($form->get('role')->getData());
             }
 
-            // Sauvegarder les modifications
             $entityManager->flush();
 
-            // Ajouter un message flash
             $this->addFlash('success', 'L\'utilisateur a été modifié avec succès !');
 
             return $this->redirectToRoute('update_personnels', ['id' => $id]);
@@ -118,6 +114,8 @@ class PersonnelsController extends AbstractController
     }
 
 
+// Action qui affiche la liste de tous les utilisateurs afin qu'ils puissent être supprimés.
+// Accessible uniquement par les administrateurs (ROLE_ADMIN).
     #[Route('/allUserDelete', name: 'all_deletePersonnels')]
     #[IsGranted('ROLE_ADMIN')]
     public function allUserDelete(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
@@ -129,26 +127,23 @@ class PersonnelsController extends AbstractController
         ]);
     }
 
-
+// Action qui permet de supprimer un utilisateur spécifique de la base de données.
+// Elle vérifie si l'utilisateur existe avant de le supprimer.
     #[Route('/deleteUser/{id}', name: 'delete_personnels')]
     #[IsGranted('ROLE_ADMIN')]
     public function deleteUser(int $id, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer l'utilisateur
         $user = $entityManager->getRepository(User::class)->find($id);
 
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé');
         }
 
-        // Supprimer l'utilisateur
         $entityManager->remove($user);
         $entityManager->flush();
 
-        // Ajouter un message flash
         $this->addFlash('success', 'L\'utilisateur a été supprimé avec succès !');
 
-        // Rediriger vers la liste des utilisateurs
         return $this->redirectToRoute('all_deletePersonnels');
     }
 

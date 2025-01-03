@@ -17,6 +17,10 @@ use App\Form\ReparationsType;
 
 class ReparationsController extends AbstractController
 {
+
+// Action qui récupère et affiche les informations relatives aux réparations,
+// incluant les détails des produits, utilisateurs et réparations en cours ou passées.
+// Accessible uniquement par les utilisateurs ayant le rôle ROLE_ADMIN.
     #[Route('/reparations', name: 'app_reparations')]
     #[IsGranted('ROLE_ADMIN')]
     public function reparation(HistoriquesRepository $historiquesRepository, ReparationsRepository $reparationsRepository): Response
@@ -47,11 +51,14 @@ class ReparationsController extends AbstractController
     }
 
 
+// Action qui permet d'ajouter ou de mettre à jour les réparations pour un produit spécifique.
+// Elle affiche un formulaire de réparation, vérifie la validité des données soumises,
+// et met à jour l'état du produit en "Réparation".
+// Accessible uniquement par les utilisateurs ayant le rôle ROLE_ADMIN.
     #[Route('/reparations_form/{produitId}', name: 'formulaire_reparation')]
     #[IsGranted('ROLE_ADMIN')]
     public function reparationForm(int $produitId, Request $request, EntityManagerInterface $entityManager, ProduitRepository $produitRepository): Response
     {
-        // Récupération du produit
         $produit = $produitRepository->find($produitId);
         if (!$produit) {
             throw $this->createNotFoundException("Produit non trouvé !");
@@ -78,12 +85,10 @@ class ReparationsController extends AbstractController
             $entityManager->persist($reparation);
             $entityManager->flush();
 
-            // Redirection après succès
             $this->addFlash('success', 'La réparation a été ajoutée avec succès et l\'état du produit a été mis à jour !');
             return $this->redirectToRoute('app_reparations');
         }
 
-        // Retourner la vue
         return $this->render('admin/reparations/reparation_form.html.twig', [
             'form' => $form->createView(),
             'produit' => $produit,

@@ -27,10 +27,8 @@ class UserFixtures extends Fixture
             $user->setNom($noms[$i]);
             $user->setEmail($faker->unique()->email);
             
-            // Hachage du mot de passe
             $user->setPassword($this->hasher->hashPassword($user, 'Password123!'));
     
-            // Définir le rôle (Admin ou User)
             if ($i === 1 || $i === 3 || $i === 4) {
                 $user->setRole(UserRole::ADMIN);
             } else {
@@ -40,14 +38,12 @@ class UserFixtures extends Fixture
             $manager->persist($user);
         }
     
-        // Ajout d'un utilisateur Admin spécifique
         $adminUser = new User();
         $adminUser->setNom("patrick");
         $adminUser->setEmail("admin@gmail.com");
         $adminUser->setPassword($this->hasher->hashPassword($adminUser, 'password'));
         $adminUser->setRole(UserRole::ADMIN);
     
-        // Persister l'utilisateur Admin
         $manager->persist($adminUser);
 
         $normalUser = new User();
@@ -58,7 +54,6 @@ class UserFixtures extends Fixture
 
         $manager->persist($normalUser);
     
-        // Sauvegarder tous les utilisateurs dans la base de données
         $manager->flush();
     }
     

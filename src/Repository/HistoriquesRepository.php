@@ -17,6 +17,10 @@ class HistoriquesRepository extends ServiceEntityRepository
         parent::__construct($registry, Historiques::class);
     }
 
+// Recherche des historiques associés à un utilisateur spécifique.
+// Cette fonction renvoie une liste d'historiques filtrée par l'utilisateur donné, 
+// triée par la date d'empreinte (la plus récente en premier).
+// Elle inclut des informations sur les produits associés à chaque historique.
     public function findHistoriqueByUser(User $user): array
     {
         return $this->createQueryBuilder('h')
@@ -29,6 +33,10 @@ class HistoriquesRepository extends ServiceEntityRepository
             ->getResult();
     }
     
+
+
+// Recherche tous les historiques où le produit a été signalé comme ayant un problème (signalement = 'Probleme detecte').
+// Cette fonction renvoie les historiques associés aux produits concernés, ainsi que les utilisateurs correspondants.
     public function findAllReparations()
     {
         return $this->createQueryBuilder('h')
@@ -38,6 +46,19 @@ class HistoriquesRepository extends ServiceEntityRepository
             ->addSelect('u')
             ->where('h.signalement = :signalement')
             ->setParameter('signalement', 'Probleme detecte')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
+// Recherche des historiques dont la valeur de retard est supérieure à zéro.
+// Cette fonction renvoie une liste d'historiques ayant un retard, pour potentiellement gérer des notifications de retard.
+    public function findRetardNotification(): array
+    {
+        return $this->createQueryBuilder('h')
+            ->where('h.retard > :value')
+            ->setParameter('value', 0)
             ->getQuery()
             ->getResult();
     }

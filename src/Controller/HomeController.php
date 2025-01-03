@@ -9,6 +9,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class HomeController extends AbstractController
 {
+// Contrôleur pour la gestion de la page d'accueil sécurisée
+// Accessible uniquement aux utilisateurs ayant le rôle 'ROLE_USER'
     #[Route('/home', name: 'app_home')]
     #[IsGranted('ROLE_USER')]
     public function index(): Response

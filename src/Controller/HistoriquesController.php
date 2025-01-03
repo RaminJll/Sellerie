@@ -16,10 +16,15 @@ use App\Repository\HistoriquesRepository;
 class HistoriquesController extends AbstractController
 {
 
+// Route pour réserver un produit. Accessible uniquement aux utilisateurs ayant le rôle ROLE_USER
     #[Route('/produit/reserver', name: 'produit_reserver', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function reserver(Request $request, ProduitRepository $produitRepository, EntityManagerInterface $entityManager): Response
     {
+        // Vérifie et sécurise la soumission du formulaire avec un token CSRF.
+        // Récupère l'utilisateur actuellement connecté.
+        // Réserve un produit en changeant son état et en créant un enregistrement dans l'historique.
+
         /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
 
@@ -51,7 +56,7 @@ class HistoriquesController extends AbstractController
     }
 
 
-
+    // Route pour afficher l'historique des réservations de l'utilisateur connecté.
     #[Route('/historique', name: 'app_historiques', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function historique(HistoriquesRepository $historiquesRepository): Response
@@ -66,11 +71,15 @@ class HistoriquesController extends AbstractController
 
 
 
-
+    // Route pour rendre un produit réservé. Accessible uniquement aux utilisateurs ayant le rôle 'ROLE_USER'.
     #[Route('/produit/rendre', name: 'produit_rendre', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function rendre(Request $request, ProduitRepository $produitRepository, EntityManagerInterface $entityManager, HistoriquesRepository $historiquesRepository): Response
     {
+        // Vérifie et sécurise la soumission du formulaire avec un token CSRF.
+        // Gère le retour d'un produit en mettant à jour son état initial et en enregistrant toute anomalie signalée.
+        // Calcule le retard éventuel dans la restitution et met à jour l'historique.
+
         $user = $this->getUser();
 
         $token = $request->request->get('_csrf_token');

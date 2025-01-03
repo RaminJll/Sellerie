@@ -66,12 +66,19 @@ class Produit
     #[ORM\OneToMany(targetEntity: Reparations::class, mappedBy: 'id_produit')]
     private Collection $reparations;
 
+    /**
+     * @var Collection<int, Notifications>
+     */
+    #[ORM\OneToMany(targetEntity: Notifications::class, mappedBy: 'produit')]
+    private Collection $notifications;
+
     public function __construct()
     {
         $this->historiques = new ArrayCollection();
         $this->statistiques = new ArrayCollection();
         $this->maintenances = new ArrayCollection();
         $this->reparations = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -289,6 +296,36 @@ class Produit
             // set the owning side to null (unless already changed)
             if ($reparation->getIdProduit() === $this) {
                 $reparation->setIdProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notifications>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notifications $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notifications $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getProduit() === $this) {
+                $notification->setProduit(null);
             }
         }
 

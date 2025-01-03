@@ -11,42 +11,78 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\NotificationsRepository;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Repository\ProduitRepository;
+use App\Enum\ProduitEtat;
+use App\Entity\Historiques;
 
 class NotificationController extends AbstractController
 {
-    #[Route('/notification', name: 'app_notification')]
-    public function gestionStock(EntityManagerInterface $entityManager): Response
-    {
-        // Récupérer l'EntityManager pour interagir avec la base de données
-        $produitRepository = $entityManager->getRepository(Produit::class);
-        $notificationsRepository = $entityManager->getRepository(Notifications::class);
-
-        // Récupérer tous les types de produits dans la table Produit
-        $typesProduits = $produitRepository->findDistinctTypes(); // Méthode personnalisée pour obtenir les types distincts
-
-        // Parcours de chaque type de produit
-        foreach ($typesProduits as $typeProduit) {
-            // Compter le nombre de produits valides (état : 'neuf', 'bon etat', 'usé') pour chaque type
-            $validProductCount = $produitRepository->stock($typeProduit);
-
-            // Si moins de 20 produits valides, ajouter une notification
-            if ($validProductCount < 20) {
+// Action qui gère les notifications liées à la gestion du stock. Elle vérifie si des notifications de réapprovisionnement ou de retard doivent être créées
+// en fonction des produits présents dans la base de données et de leur état
+// Si une notification doit être créée, elle est ajoutée à la base de données
+    #[Route('/notification', name: 'app_notifications')]
+    public function gestionStock(EntityManagerInterface $entityManager, ProduitRepository $produitRepository, NotificationsRepository $notificationsRepository): Response {
+        $validEtats = [ProduitEtat::Neuf, ProduitEtat::BonEtat, ProduitEtat::USE];
+    
+        $typesAndCategories = $produitRepository->findDistinctTypesAndCategories();
+    
+        foreach ($typesAndCategories as $record) {
+            $typeProduit = $record['type_produit'];
+            $categorie = $record['categorie'];
+    
+            $validProductCount = $produitRepository->countByTypeAndCategorieAndEtats(
+                $typeProduit,
+                $categorie,
+                $validEtats
+            );
+    
+            $existingNotification = $notificationsRepository->findOneBy([
+                'type_produit_manquant' => $typeProduit,
+                'type' => NotificationType::Reapprovisionnement,
+                'categorie' => $categorie
+            ]);
+    
+            if ($validProductCount < 20 && !$existingNotification) {
                 $notification = new Notifications();
                 $notification->setType(NotificationType::Reapprovisionnement);
                 $notification->setDateNotification(new \DateTime());
                 $notification->setTypeProduitManquant($typeProduit);
-
-                // Enregistrer la notification dans la base de données
+                $notification->setCategorie($categorie);
+    
                 $entityManager->persist($notification);
             }
         }
-
-        // Enregistrer toutes les notifications créées
+    
         $entityManager->flush();
-
-        return $this->render('notification/index.html.twig', [
-            'controller_name' => 'NotificationController',
+    
+        $retardNotifications = $entityManager->getRepository(Historiques::class)->findRetardNotification();
+    
+        foreach ($retardNotifications as $retard) {
+            $existingRetardNotification = $notificationsRepository->findOneBy([
+                'produit' => $retard->getProduit(),
+                'type' => NotificationType::Retard
+            ]);
+    
+            if (!$existingRetardNotification) {
+                $notification = new Notifications();
+                $notification->setType(NotificationType::Retard);
+                $notification->setDateNotification(new \DateTime());
+                $notification->setProduit($retard->getProduit());
+                $notification->setCategorie($retard->getProduit()->getCategorie());
+    
+                $entityManager->persist($notification);
+            }
+        }
+    
+        $entityManager->flush();
+    
+        $notifications = $notificationsRepository->findAll();
+    
+        return $this->render('admin/notifications/notifications.html.twig', [
+            'notifications' => $notifications,
         ]);
     }
+    
 }
-

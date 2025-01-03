@@ -17,11 +17,11 @@ use App\Repository\MaintenancesRepository;
 
 class MaintenanceController extends AbstractController
 {
+    // Action qui récupère les produits nécessitant une maintenance et les affiche dans une vue.
     #[Route(path: '/maintenance', name: 'app_maintenance')]
     #[IsGranted('ROLE_ADMIN')]
     public function maintenance(ProduitRepository $produitRepository, MaintenancesRepository $maintenancesRepository): Response
     {
-        // Récupère uniquement les produits dont la colonne planning est aujourd'hui ou dans le passé
         $allProduits = $produitRepository->findAllMaintenance();
         $maintenancesData = [];
     
@@ -30,8 +30,8 @@ class MaintenanceController extends AbstractController
     
             $maintenancesData[] = [
                 'produit' => $produit,
-                'categorie' => $produit->getCategorie(), // Suppose que la catégorie est une propriété du produit
-                'typeProduit' => $produit->getTypeProduit(), // Suppose que le type est une propriété du produit
+                'categorie' => $produit->getCategorie(),
+                'typeProduit' => $produit->getTypeProduit(),
                 'description' => $maintenance ? $maintenance->getDescription() : null,
                 'coutMaintenance' => $maintenance ? $maintenance->getCoutMaintenance() : null,
                 'dateFinMaintenance' => $maintenance ? $maintenance->getDateFinMaintenance() : null,
@@ -44,12 +44,12 @@ class MaintenanceController extends AbstractController
     }
     
     
-
+// Action qui permet de gérer le formulaire de création d'une maintenance pour un produit spécifique.
+// Après validation, la maintenance est enregistrée et l'état du produit est mis à jour.
     #[Route('/maintenances_form/{produitId}', name: 'formulaire_maintenance')]
     #[IsGranted('ROLE_ADMIN')]
     public function maintenanceForm(int $produitId, Request $request, EntityManagerInterface $entityManager, ProduitRepository $produitRepository): Response
     {
-        // Récupération du produit
         $produit = $produitRepository->find($produitId);
         if (!$produit) {
             throw $this->createNotFoundException("Produit non trouvé !");
@@ -71,12 +71,10 @@ class MaintenanceController extends AbstractController
 
             $produit->setEtat(ProduitEtat::HorsService);
 
-            // Enregistrement en base
             $entityManager->persist($produit);
             $entityManager->persist($maintenance);
             $entityManager->flush();
 
-            // Redirection après succès
             return $this->redirectToRoute('app_maintenance');
         }
 

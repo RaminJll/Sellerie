@@ -20,7 +20,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Nom',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter your name',
+                        'message' => 'Entrez votre nom',
                     ]),
                 ],
             ])
@@ -28,7 +28,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Email',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter your email',
+                        'message' => 'Entrez votre email',
                     ]),
                 ],
             ])
@@ -38,11 +38,11 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Entrez votre mot de passe',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'Votre mot de passe doit avoir au moins {{ limit }} caractères',
                         'max' => 4096,
                     ]),
                 ],

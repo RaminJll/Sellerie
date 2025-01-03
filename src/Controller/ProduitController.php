@@ -15,6 +15,8 @@ use App\Repository\ReparationsRepository;
 
 class ProduitController extends AbstractController
 {
+// Action qui récupère et affiche les types de produits d'une catégorie donnée.
+// Accessible uniquement par les utilisateurs ayant le rôle ROLE_USER.
     #[Route('/produitType/{categorie}', name: 'produit_type')]
     #[IsGranted('ROLE_USER')]
     public function produitType(string $categorie, ProduitRepository $ProduitRepository): Response
@@ -27,6 +29,9 @@ class ProduitController extends AbstractController
         ]);
     }
 
+// Action qui récupère et affiche la liste des produits d'une catégorie et d'un type donnés, avec pagination.
+// Elle met également à jour l'état des produits en fonction des réparations terminées.
+// Accessible uniquement par les utilisateurs ayant le rôle ROLE_USER.
     #[Route('/produitList/{categorie}/{type}', name: 'produit_list')]
     #[IsGranted('ROLE_USER')]
     public function produitList(string $categorie, string $type, ProduitRepository $produitRepository, PaginatorInterface $paginator, Request $request, ReparationsRepository $reparationsRepository, EntityManagerInterface $entityManager): Response

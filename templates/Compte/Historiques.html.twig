@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	{{dump(historiques)}}
 	<section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
 		<div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-16">
 			<h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"></h2>
 			<p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
-				Explore the whole collection of open-source web components and elements built with the utility classes from Tailwind
+				Ici vous trouverez l'historique de vos emprunts vous devez imperativement rendre les produits empruntés 15 jours après la date d'emprunt
 			</p>
 		</div>
 		<div
@@ -54,7 +53,7 @@
 											<input type="hidden" name="_csrf_token" value="{{ csrf_token('produit_rendre') }}">
 											<input type="hidden" name="id" value="{{ historique.id }}">
 											<input type="hidden" name="etat_init" value="{{ historique.etat_init.value }}">
-											{% if historique.etat.value == 'hors service' or historique.etat.value == 'en reparation' %}
+											{% if historique.date_rendu == null %}
 												<button class="text-white bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded">
 													Rendre
 												</button>

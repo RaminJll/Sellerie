@@ -32,6 +32,11 @@
 						</tr>
 					</thead>
 					<tbody>
+						{% if reparationsData == null %}
+						    <tr>
+                                <td colspan="9" class="text-center text-gray-600 dark:text-gray-400">Aucun produit n'a été signalé pour être en réparation</td>
+                            </tr>
+						{% endif %}
 						{% for data in reparationsData %}
 							<tr class="border-b dark:border-gray-700">
 								<td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ data.produit.nom }}</td>
